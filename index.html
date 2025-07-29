@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSU CUCEK – Campus Essentials</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body data-color-scheme="light">
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Fixed Header -->
+    <header class="header" id="header">
+        <div class="container flex justify-between items-center py-16">
+            <h1 class="logo" id="logo">KSU CUCEK</h1>
+            <!-- Desktop Nav -->
+            <nav class="desktop-nav" id="desktopNav" aria-label="Primary">
+                <div class="tab-buttons flex gap-8" role="tablist">
+                    <button class="tab-btn active" data-tab="helpdesk" role="tab" aria-selected="true">Helpdesk</button>
+                    <button class="tab-btn" data-tab="bus" role="tab" aria-selected="false">Bus Timings</button>
+                    <button class="tab-btn" data-tab="syllabus" role="tab" aria-selected="false">Syllabus</button>
+                    <button class="tab-btn" data-tab="hostels" role="tab" aria-selected="false">Approved Hostels</button>
+                    <button class="tab-btn" data-tab="qrcodes" role="tab" aria-selected="false">QR Codes</button>
+                </div>
+            </nav>
+            <!-- Header Controls -->
+            <div class="header-controls">
+                <!-- Mobile Menu Hamburger -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+                <!-- Dark-mode Toggle -->
+                <label class="theme-toggle" for="darkModeToggle" aria-label="Toggle colour scheme">
+                    <input type="checkbox" id="darkModeToggle" class="sr-only" aria-label="Dark mode switch">
+                    <span class="toggle-slider">
+                        <span class="toggle-icon sun">☀️</span>
+                        <span class="toggle-icon moon">🌙</span>
+                    </span>
+                </label>
+            </div>
+        </div>
+        <!-- Mobile Menu Drawer -->
+        <div class="mobile-menu hidden" id="mobileMenu">
+            <div class="mobile-menu-content">
+                <button class="mobile-tab-btn" data-tab="helpdesk">Helpdesk</button>
+                <button class="mobile-tab-btn" data-tab="bus">Bus Timings</button>
+                <button class="mobile-tab-btn" data-tab="syllabus">Syllabus</button>
+                <button class="mobile-tab-btn" data-tab="hostels">Approved Hostels</button>
+                <button class="mobile-tab-btn" data-tab="qrcodes">QR Codes</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Swipeable Tab Strip (mobile / tablet) -->
+    <div class="tab-strip" id="tabStrip" role="tablist" aria-label="Quick navigation">
+        <div class="tab-strip-wrapper">
+            <button class="tab-strip-btn active" data-tab="helpdesk">Helpdesk</button>
+            <button class="tab-strip-btn" data-tab="bus">Bus Timings</button>
+            <button class="tab-strip-btn" data-tab="syllabus">Syllabus</button>
+            <button class="tab-strip-btn" data-tab="hostels">Hostels</button>
+            <button class="tab-strip-btn" data-tab="qrcodes">QR Codes</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container py-16" id="mainContent">
+        <!-- 1. Helpdesk -->
+        <section id="helpdesk" class="tab-content section-animate" role="tabpanel" aria-labelledby="tab-helpdesk">
+            <div class="section-header">
+                <h2>Helpdesk</h2>
+                <p class="section-description">Contact our support team for assistance</p>
+            </div>
+           <div class="table-wrapper">
+  <table id="helpdeskTable" class="data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Designation</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Dynamic rows will be injected here -->
+    </tbody>
+  </table>
+</div>
+
+        </section>
+
+        <!-- 2. Bus Timings -->
+        <section id="bus" class="tab-content section-animate hidden" role="tabpanel" aria-labelledby="tab-bus">
+            <div class="section-header">
+                <h2>Bus Timings</h2>
+                <p class="section-description">Daily schedules for popular routes</p>
+            </div>
+            <div class="bus-routes">
+  <!-- Route A–>B -->
+  <div class="route-section scale-animate">
+    <h3>Alappuzha ↔ Kaavalam / Thattassery</h3>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+           <th>From Station</th>
+            <th>Time</th>
+            <th class="divider">From Station</th>
+            <th>Time</th>
+        </thead>
+        <tbody id="busTimesAlappuzha">
+          <!-- Times will be injected here from sheet -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Route B–>C -->
+  <div class="route-section scale-animate">
+    <h3>Kayalpuram ↔ Changanassery</h3>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+           <th>From Station</th>
+            <th>Time</th>
+            <th class="divider">From Station</th>
+            <th>Time</th>
+        </thead>
+        <tbody id="busTimesKayalpuram">
+          <!-- Times will be injected here from sheet -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+        </section>
+
+        <!-- 3. Syllabus -->
+        <section id="syllabus" class="tab-content section-animate hidden" role="tabpanel" aria-labelledby="tab-syllabus">
+            <div class="section-header">
+                <h2>Syllabus</h2>
+                <p class="section-description">Download syllabus documents for your branch &amp; scheme</p>
+            </div>
+            <div class="syllabus-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="branchSelect">Branch</label>
+                        <select class="form-control dropdown-animate" id="branchSelect">
+                            <option value="">Select Branch</option>
+                            <option value="ce">Civil Engineering</option>
+                            <option value="cs">Computer Science Engineering</option>
+                            <option value="ec">Electronics & Communication Engineering</option>
+                            <option value="ee">Electrical & Electronics Engineering</option>
+                            <option value="it">Information Technology</option>
+                            <option value="mca">MCA</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="schemeSelect">Scheme</label>
+                        <select class="form-control dropdown-animate" id="schemeSelect" disabled>
+                            <option value="">Select Scheme</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn--primary btn--lg download-btn hidden" id="downloadBtn">📥 Download Syllabus</button>
+            </div>
+        </section>
+
+        <!-- 4. Approved Hostels -->
+        <section id="hostels" class="tab-content section-animate hidden" role="tabpanel" aria-labelledby="tab-hostels">
+            <div class="section-header">
+                <h2>Approved Hostels</h2>
+                <p class="section-description">Find comfortable &amp; safe accommodation</p>
+            </div>
+            <!-- Global Search -->
+            
+
+            <div class="hostels-container">
+                <!-- Boys Hostels Accordion -->
+                <div class="hostels-section" id="boysSection">
+                    <div class="hostels-header">
+                        <h3>Boys Hostels</h3>
+                        
+                    </div>
+                    <div class="hostels-content" id="boysContent">
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr><th>Name</th><th>Phone</th></tr>
+                                </thead>
+                                <tbody id="boysTable">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Girls Hostels Accordion -->
+                <div class="hostels-section" id="girlsSection">
+                    <div class="hostels-header" data-target="girlsTable">
+                        <h3>Girls Hostels</h3>
+                        
+                    </div>
+                    <div class="hostels-content" id="girlsContent">
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr><th>Name</th><th>Phone</th></tr>
+                                </thead>
+                                <tbody id="girlsTable">
+                                    <!-- Dynamic rows will be injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. QR Codes -->
+        <section id="qrcodes" class="tab-content section-animate hidden" role="tabpanel" aria-labelledby="tab-qrcodes">
+            <div class="section-header">
+                <h2>QR Codes</h2>
+                <p class="section-description">Quick access to important resources</p>
+            </div>
+            <div class="qr-grid">
+                <a href="https://google.com" target="_blank" rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr1" style="text-decoration: none;">
+                <div class="qr-placeholder">
+                 <img src="items/whatsapp.png" alt="WhatsApp Icon" style="width: 2.25rem; height: 2.25rem; object-fit: contain;">
+                </div>
+                <figcaption>WhatsApp Group</figcaption>
+                 <p class="qr-desc">Join our WhatsApp community</p>
+                </a>
+
+                <a href="https://cucek.cusat.ac.in/?page=3" target="_blank" rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr2" style="text-decoration: none;">
+                <div class="qr-placeholder">👨‍🏫</div>
+                <figcaption>Faculty Directory</figcaption>
+                <p class="qr-desc">Contact faculty members</p>
+                </a>
+                <a href="https://admissions.cusat.ac.in/Files/FEE%20STRUCTURE%202024-FINAL1.pdf" target="_blank" rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr3" style="text-decoration: none;">
+                <div class="qr-placeholder">💰</div>
+                <figcaption>Fee Structure</figcaption>
+                <p class="qr-desc">View current fee details</p>
+                </a>
+
+               <a href="https://cucek.cusat.ac.in/files/regulations.pdf" target="_blank" rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr4" style="text-decoration: none;">
+                <div class="qr-placeholder">📋</div>
+                <figcaption>Academic Regulations</figcaption>
+                 <p class="qr-desc">Academic rules and guidelines</p>
+                </a>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="container flex justify-center py-16">
+            <p>By KSU CUCEK</p>
+        </div>
+    </footer>
+
+    <!-- Application JS -->
+    <script src="app.js"></script>
+</body>
+</html>
