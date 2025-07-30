@@ -22,7 +22,7 @@ const Data = [
         ],
     },
     {
-        img: './icon/generalenquiry.png',
+        img: './icon/it.png',
         head: "Information Technology",
         person1: [
             {
@@ -44,7 +44,7 @@ const Data = [
         ],
     },
     {
-        img: './icon/generalenquiry.png',
+        img: './icon/ec.png',
         head: "Electronics & Communication Engineering",
         person1: [
             {
@@ -66,7 +66,7 @@ const Data = [
         ],
     },
     {
-        img: './icon/generalenquiry.png',
+        img: './icon/eee.png',
         head: "Electrical & Electronics Engineering",
         person1: [
             {
@@ -82,7 +82,7 @@ const Data = [
         ],
     },
     {
-        img: './icon/generalenquiry.png',
+        img: './icon/cs.png',
         head: "Computer Science & Engineering",
         person1: [
             {
@@ -104,7 +104,7 @@ const Data = [
         ],
     },
     {
-        img: './icon/generalenquiry.png',
+        img: './icon/civil.png',
         head: "Civil Engineering",
         person1: [
             {
@@ -120,7 +120,7 @@ const Data = [
         ],
     },
     {
-        img: './icon/generalenquiry.png',
+        img: './icon/mca.png',
         head: "MCA",
         person1: [
             {
