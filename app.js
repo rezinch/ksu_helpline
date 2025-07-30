@@ -119,11 +119,14 @@ function setupDarkMode() {
     document.documentElement.offsetHeight;
   };
 
-  checkbox.checked = false;
-  applyTheme(false);
+  const storedTheme = localStorage.getItem('ksu_theme');
+const isDark = storedTheme === 'dark';
+checkbox.checked = isDark;
+applyTheme(isDark);
 
   checkbox.addEventListener('change', () => {
     applyTheme(checkbox.checked);
+    localStorage.setItem('ksu_theme', checkbox.checked ? 'dark' : 'light');
   });
 
   const slider = checkbox.nextElementSibling;
@@ -133,6 +136,7 @@ function setupDarkMode() {
       e.stopPropagation();
       checkbox.checked = !checkbox.checked;
       applyTheme(checkbox.checked);
+       localStorage.setItem('ksu_theme', checkbox.checked ? 'dark' : 'light');
     });
   }
 }
