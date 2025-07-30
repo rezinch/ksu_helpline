@@ -60,6 +60,14 @@ const savedSection = $(`#${savedTab}`);
 if (savedSection) savedSection.classList.remove('hidden');
 currentTab = savedTab;
 
+  allButtons.forEach(btn => {
+  const isActive = btn.dataset.tab === savedTab;
+  btn.classList.toggle('active', isActive);
+  if (btn.hasAttribute('aria-selected')) {
+    btn.setAttribute('aria-selected', String(isActive));
+  }
+});
+
 
   const switchTab = tabName => {
     if (!tabName || tabName === currentTab) return;
