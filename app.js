@@ -26,7 +26,7 @@ function initApp() {
     loadBusTimes('https://docs.google.com/spreadsheets/d/e/2PACX-1vR6-Xq1Ko2HSmZ4_wRjcLKW4G5S8FGGGpcRmPFwE_R7epKZ6ZRovs-91r2MZiws1nuYk3euXaQeeA_n/pub?output=csv&t=' + Date.now(), 'busTimesAlappuzha');
     loadBusTimes('https://docs.google.com/spreadsheets/d/e/2PACX-1vQVFgYQra9dDafW-wKUhs-hSl2nBEKzlCNoAKDP-mTKHMv9uZdrJtrZs8LcHmcFG-4xYJuTndb6s1_Q/pub?output=csv&t=' + Date.now(), 'busTimesKayalpuram');
 
-    loadHelpdeskFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vQeSFVcp3wLyJqeblxj2H3ZQyOlADqFKSbsHZH0PFl4EjFWHNxQHedGJjmMCXvs8RqvuQcLodt5mt5a/pub?output=csv');
+    // loadHelpdeskFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vQeSFVcp3wLyJqeblxj2H3ZQyOlADqFKSbsHZH0PFl4EjFWHNxQHedGJjmMCXvs8RqvuQcLodt5mt5a/pub?output=csv');
   } catch (err) {
     console.error('[KSU-CUCEK] Init error:', err);
   }
@@ -339,65 +339,65 @@ function setupGSAP() {
 /*****************
   Helpdesk Sheet Integration
 *****************/
-function loadHelpdeskFromSheet(csvUrl) {
-  fetch(csvUrl)
-    .then(res => res.text())
-    .then(csv => {
-      const rows = csv.trim().split('\n').map(r => r.split(','));
-      const [headers, ...dataRows] = rows;
+// function loadHelpdeskFromSheet(csvUrl) {
+//   fetch(csvUrl)
+//     .then(res => res.text())
+//     .then(csv => {
+//       const rows = csv.trim().split('\n').map(r => r.split(','));
+//       const [headers, ...dataRows] = rows;
 
-      const headingIndex = headers.findIndex(h => h.toLowerCase().includes('heading'));
-      const nameIndex = headers.findIndex(h => h.toLowerCase().includes('name'));
-      const roleIndex = headers.findIndex(h => h.toLowerCase().includes('designation'));
-      const phoneIndex = headers.findIndex(h => h.toLowerCase().includes('phone'));
-      const emailIndex = headers.findIndex(h => h.toLowerCase().includes('email'));
-      const emojiIndex = headers.findIndex(h => h.toLowerCase().includes('emoji'));
+//       const headingIndex = headers.findIndex(h => h.toLowerCase().includes('heading'));
+//       const nameIndex = headers.findIndex(h => h.toLowerCase().includes('name'));
+//       const roleIndex = headers.findIndex(h => h.toLowerCase().includes('designation'));
+//       const phoneIndex = headers.findIndex(h => h.toLowerCase().includes('phone'));
+//       const emailIndex = headers.findIndex(h => h.toLowerCase().includes('email'));
+//       const emojiIndex = headers.findIndex(h => h.toLowerCase().includes('emoji'));
 
-      const container = document.getElementById('helpdeskCards');
-      if (!container) return;
-      container.innerHTML = '';
+//       const container = document.getElementById('helpdeskCards');
+//       if (!container) return;
+//       container.innerHTML = '';
 
-      dataRows.forEach(row => {
-        const heading = row[headingIndex] || '';
-        const name = row[nameIndex] || '';
-        const designation = row[roleIndex] || '';
-        const phone = row[phoneIndex] || '';
-        const email = row[emailIndex] || '';
-        const emoji = emojiIndex !== -1 ? row[emojiIndex] || '📞' : '📞';
+//       dataRows.forEach(row => {
+//         const heading = row[headingIndex] || '';
+//         const name = row[nameIndex] || '';
+//         const d      esignation = row[roleIndex] || '';
+//         const phone = row[phoneIndex] || '';
+//         const email = row[emailIndex] || '';
+//         const emoji = emojiIndex !== -1 ? row[emojiIndex] || '📞' : '📞';
 
-        const card = document.createElement('figure');
-        card.className = 'qr-card hover-lift help-card';
-        card.tabIndex = 0;
-        card.innerHTML = `
-          <div class="qr-placeholder">${emoji}</div>
-          <figcaption>${heading}</figcaption>
-          <p class="qr-desc">${designation}</p>
-        `;
+//         const card = document.createElement('figure');
+//         card.className = 'qr-card hover-lift help-card';
+//         card.tabIndex = 0;
+//         card.innerHTML = `
+//           <div class="qr-placeholder">${emoji}</div>
+//           <figcaption>${heading}</figcaption>
+//           <p class="qr-desc">${designation}</p>
+//         `;
 
-        card.addEventListener('click', () => {
-          $('#helpModalHeading').textContent = heading;
-          $('#helpModalName').textContent = name;
-          $('#helpModalRole').textContent = designation;
-          $('#helpModalPhone').textContent = phone;
-          $('#helpModalEmail').textContent = email;
-          $('#helpModal').classList.remove('hidden');
-        });
+//         card.addEventListener('click', () => {
+//           $('#helpModalHeading').textContent = heading;
+//           $('#helpModalName').textContent = name;
+//           $('#helpModalRole').textContent = designation;
+//           $('#helpModalPhone').textContent = phone;
+//           $('#helpModalEmail').textContent = email;
+//           $('#helpModal').classList.remove('hidden');
+//         });
 
-        container.appendChild(card);
-      });
+//         container.appendChild(card);
+//       });
 
-      $('#closeHelpModal').addEventListener('click', () => {
-        $('#helpModal').classList.add('hidden');
-      });
+//       $('#closeHelpModal').addEventListener('click', () => {
+//         $('#helpModal').classList.add('hidden');
+//       });
 
-      window.addEventListener('click', (e) => {
-        if (e.target.id === 'helpModal') {
-          $('#helpModal').classList.add('hidden');
-        }
-      });
-    })
-    .catch(err => console.error('📛 Helpdesk fetch fail:', err));
-}
+//       window.addEventListener('click', (e) => {
+//         if (e.target.id === 'helpModal') {
+//           $('#helpModal').classList.add('hidden');
+//         }
+//       });
+//     })
+//     .catch(err => console.error('📛 Helpdesk fetch fail:', err));
+// }
 
 
 
