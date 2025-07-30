@@ -1577,3 +1577,60 @@
     opacity: 1;
   }
 }
+.hostel-switch {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hostel-toggle-buttons .btn.active {
+  background-color: var(--color-primary-dark);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hostel-slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+#boysBtn,
+#girlsBtn {
+  background-color: #e0e0e0; /* soft gray in light mode */
+  color: var(--color-primary);
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin: 0.5rem;
+}
+
+#boysBtn.active,
+#girlsBtn.active {
+  background-color: #007BFF; /* blue */
+  color: white;
+}
+
+[data-color-scheme="dark"] #boysBtn,
+[data-color-scheme="dark"] #girlsBtn {
+  background-color: #333;
+  color:var(--color-primary);
+}
+
+[data-color-scheme="dark"] #boysBtn.active,
+[data-color-scheme="dark"] #girlsBtn.active {
+  background-color: #3399ff;
+  color: #fff;
+}
