@@ -6,21 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KSU CUCEK</title>
     <link rel="stylesheet" href="style.css">
-    <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 
 <body data-color-scheme="light">
 
-    <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
-    <!-- Fixed Header -->
     <header class="header" id="header">
         <div class="container flex justify-between items-center py-16">
             <h1 class="logo" id="logo">KSU CUCEK</h1>
-            <!-- Desktop Nav -->
             <nav class="desktop-nav" id="desktopNav" aria-label="Primary">
                 <div class="tab-buttons flex gap-8" role="tablist">
                     <button class="tab-btn active" data-tab="helpdesk" role="tab" aria-selected="true">Helpdesk</button>
@@ -32,16 +28,13 @@
                         Links</button>
                 </div>
             </nav>
-            <!-- Header Controls -->
             <div class="header-controls">
-                <!-- Mobile Menu Hamburger -->
                 <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu"
                     aria-expanded="false">
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                 </button>
-                <!-- Dark-mode Toggle -->
                 <label class="theme-toggle" for="darkModeToggle" aria-label="Toggle colour scheme">
                     <input type="checkbox" id="darkModeToggle" class="sr-only" aria-label="Dark mode switch">
                     <span class="toggle-slider">
@@ -51,7 +44,6 @@
                 </label>
             </div>
         </div>
-        <!-- Mobile Menu Drawer -->
         <div class="mobile-menu hidden" id="mobileMenu">
             <div class="mobile-menu-content">
                 <button class="mobile-tab-btn" data-tab="helpdesk">Helpdesk</button>
@@ -63,7 +55,6 @@
         </div>
     </header>
 
-    <!-- Swipeable Tab Strip (mobile / tablet) -->
     <div class="tab-strip" id="tabStrip" role="tablist" aria-label="Quick navigation">
         <div class="tab-strip-wrapper">
             <button class="tab-strip-btn active" data-tab="helpdesk">Helpdesk</button>
@@ -74,9 +65,7 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <main class="container py-16" id="mainContent">
-        <!-- 1. Helpdesk -->
         <section id="helpdesk" class="tab-content section-animate" role="tabpanel" aria-labelledby="tab-helpdesk">
             <div class="section-header">
                 <h2>Helpdesk</h2>
@@ -84,26 +73,14 @@
             </div>
             <div id="helpdeskCards" class="qr-grid"></div>
 
-            <div id="modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); 
-    background:#fff; padding:20px 30px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
-                <span id="closeModal"
-                    style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px;">&times;</span>
-                <h2 id="modalHead"></h2>
-                <div id="modalContent"></div>
-            </div>
-            <div id="overlay"
-                style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#ffffff00; z-index:999;">
-            </div>
-        </section>
+            </section>
 
-        <!-- 2. Bus Timings -->
         <section id="bus" class="tab-content section-animate hidden" role="tabpanel" aria-labelledby="tab-bus">
             <div class="section-header">
                 <h2>Bus Timings</h2>
                 <p class="section-description">Daily schedules for popular routes</p>
             </div>
             <div class="bus-routes">
-                <!-- Route A–>B -->
                 <div class="route-section scale-animate">
                     <h3>Alappuzha ↔ Kaavalam / Thattassery</h3>
                     <div class="table-wrapper">
@@ -118,13 +95,11 @@
                                 <tr>
                                     <td>Loading...</td>
                                 </tr>
-                                <!-- Times will be injected here from sheet -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Route B–>C -->
                 <div class="route-section scale-animate">
                     <h3>Kayalpuram ↔ Changanassery</h3>
                     <div class="table-wrapper">
@@ -139,7 +114,6 @@
                                 <tr>
                                     <td>Loading...</td>
                                 </tr>
-                                <!-- Times will be injected here from sheet -->
                             </tbody>
                         </table>
                     </div>
@@ -148,7 +122,6 @@
 
         </section>
 
-        <!-- 3. Syllabus -->
         <section id="syllabus" class="tab-content section-animate hidden" role="tabpanel"
             aria-labelledby="tab-syllabus">
             <div class="section-header">
@@ -181,7 +154,6 @@
             </div>
         </section>
 
-        <!-- 4. Approved Hostels -->
         <section id="hostels" class="tab-content section-animate hidden" role="tabpanel" aria-labelledby="tab-hostels">
             <div class="section-header">
                 <h2>Approved Hostels</h2>
@@ -195,7 +167,6 @@
 
 
             <div class="hostels-container">
-                <!-- Boys Hostels Accordion -->
                 <div class="hostels-section" id="boysSection" style="display: none;">
                     <div class="hostels-header">
                         <h3>Boys Hostels</h3>
@@ -219,7 +190,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Girls Hostels Accordion -->
                 <div class="hostels-section" id="girlsSection" style="display: none;">
                     <div class="hostels-header" data-target="girlsTable">
                         <h3>Girls Hostels</h3>
@@ -238,7 +208,6 @@
                                     <tr>
                                         <td>Loading...</td>
                                     </tr>
-                                    <!-- Dynamic rows will be injected here -->
                                 </tbody>
                             </table>
                         </div>
@@ -247,7 +216,6 @@
             </div>
         </section>
 
-        <!-- 5. QR Codes -->
         <section id="qrcodes" class="tab-content section-animate hidden" role="tabpanel" aria-labelledby="tab-qrcodes">
             <div class="section-header">
                 <h2>Additional Links</h2>
@@ -288,25 +256,20 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer" id="footer">
         <div class="container flex justify-center py-16">
             <p>By KSU CUCEK</p>
         </div>
     </footer>
-    <!-- 📦 Helpdesk Popup Modal -->
-    <div id="helpModal" class="help-modal hidden">
-        <div class="help-modal-content">
-            <span id="closeHelpModal" class="help-modal-close">&times;</span>
-            <h3 id="helpModalHeading" class="help-modal-heading"></h3>
-            <p id="helpModalName" class="help-modal-name"></p>
-            <p id="helpModalRole" class="help-modal-role"></p>
-            <p id="helpModalPhone" class="help-modal-phone"></p>
-            <p id="helpModalEmail" class="help-modal-email"></p>
+    
+    <div id="overlay" class="overlay">
+        <div id="modal" class="modal">
+            <span id="closeModal" class="close">&times;</span>
+            <h2 id="modalHead"></h2>
+            <div id="modalContent"></div>
         </div>
     </div>
-
-    <!-- Application JS -->
+    
     <script src="app.js"></script>
     <script src="./helpdesk.js"></script>
 </body>

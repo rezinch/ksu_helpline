@@ -1,4 +1,7 @@
-  :root {
+:root {
+
+    --card-bg: #ffffff;
+  --text-color: #000000;
     /* Primitive Color Tokens */
     --color-white: rgba(255, 255, 255, 1);
     --color-black: rgba(0, 0, 0, 1);
@@ -211,7 +214,8 @@
   /* Data attribute for manual theme switching */
   [data-color-scheme="dark"] {
 
-
+ --card-bg: #1e1e1e;
+  --text-color: #f1f1f1;
 
   
     /* RGB versions for opacity control (dark mode) */
@@ -544,7 +548,8 @@
 
   /* Card component */
   .card {
-    background-color: var(--color-surface);
+    background-color: var(--card-bg);
+     color: var(--text-color);
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-card-border);
     box-shadow: var(--shadow-sm);
@@ -1567,16 +1572,7 @@
   border: none;
 }
 
-@keyframes zoomIn {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
+
 .hostel-switch {
   display: flex;
   justify-content: center;
@@ -1633,4 +1629,75 @@
 [data-color-scheme="dark"] #girlsBtn.active {
   background-color: #3399ff;
   color: #fff;
+}
+
+
+.zoom-in {
+  animation: zoomIn 0.2s ease forwards;
+}
+
+.zoom-out {
+  animation: zoomOut 0.2s ease forwards;
+}
+#modal.zoom-in {
+  animation: zoomIn 0.3s ease forwards;
+}
+#modal.zoom-out {
+  animation: zoomOut 0.2s ease forwards;
+}
+
+/* --- CORRECTED MODAL AND OVERLAY STYLES --- 
+*/
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+}
+
+#overlay.show {
+  display: flex;
+}
+
+#modal {
+  position: relative;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: none;
+  width: 90%;
+  max-width: 320px;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes zoomOut {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(0.9);
+        opacity: 0;
+    }
 }
