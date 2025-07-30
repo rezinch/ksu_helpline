@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 <body data-color-scheme="light">
+    
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -76,23 +77,7 @@
                 <h2>Helpdesk</h2>
                 <p class="section-description">Contact Us</p>
             </div>
-           <div class="table-wrapper">
-  <table id="helpdeskTable" class="data-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Designation</th>
-        <th>Phone</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-<tr><td>Loading...</td></tr>
-      <!-- Dynamic rows will be injected here -->
-    </tbody>
-  </table>
-</div>
-
+            <div id="helpdeskCards" class="qr-grid"></div>
         </section>
 
         <!-- 2. Bus Timings -->
@@ -268,6 +253,17 @@
             <p>By KSU CUCEK</p>
         </div>
     </footer>
+<!-- 📦 Helpdesk Popup Modal -->
+<div id="helpModal" class="help-modal hidden">
+  <div class="help-modal-content">
+    <span id="closeHelpModal" class="help-modal-close">&times;</span>
+    <h3 id="helpModalHeading" class="help-modal-heading"></h3>
+    <p id="helpModalName" class="help-modal-name"></p>
+    <p id="helpModalRole" class="help-modal-role"></p>
+    <p id="helpModalPhone" class="help-modal-phone"></p>
+    <p id="helpModalEmail" class="help-modal-email"></p>
+  </div>
+</div>
 
     <!-- Application JS -->
     <script src="app.js"></script>

@@ -370,25 +370,60 @@ function loadHelpdeskFromSheet(csvUrl) {
       const rows = csv.trim().split('\n').map(r => r.split(','));
       const [headers, ...dataRows] = rows;
 
-      const table = $('#helpdeskTable');
-      const tbody = table.querySelector('tbody') || table.appendChild(document.createElement('tbody'));
-     if (tbody) {
-  tbody.innerHTML = ''; // remove "Loading..." row
-}
+      const headingIndex = headers.findIndex(h => h.toLowerCase().includes('heading'));
+      const nameIndex = headers.findIndex(h => h.toLowerCase().includes('name'));
+      const roleIndex = headers.findIndex(h => h.toLowerCase().includes('designation'));
+      const phoneIndex = headers.findIndex(h => h.toLowerCase().includes('phone'));
+      const emailIndex = headers.findIndex(h => h.toLowerCase().includes('email'));
+      const emojiIndex = headers.findIndex(h => h.toLowerCase().includes('emoji'));
+
+      const container = document.getElementById('helpdeskCards');
+      if (!container) return;
+      container.innerHTML = '';
 
       dataRows.forEach(row => {
-        const tr = document.createElement('tr');
-        tr.classList.add('table-row-animate');
-        row.forEach(cell => {
-          const td = document.createElement('td');
-          td.textContent = cell;
-          tr.appendChild(td);
+        const heading = row[headingIndex] || '';
+        const name = row[nameIndex] || '';
+        const designation = row[roleIndex] || '';
+        const phone = row[phoneIndex] || '';
+        const email = row[emailIndex] || '';
+        const emoji = emojiIndex !== -1 ? row[emojiIndex] || '📞' : '📞';
+
+        const card = document.createElement('figure');
+        card.className = 'qr-card hover-lift help-card';
+        card.tabIndex = 0;
+        card.innerHTML = `
+          <div class="qr-placeholder">${emoji}</div>
+          <figcaption>${heading}</figcaption>
+          <p class="qr-desc">${designation}</p>
+        `;
+
+        card.addEventListener('click', () => {
+          $('#helpModalHeading').textContent = heading;
+          $('#helpModalName').textContent = name;
+          $('#helpModalRole').textContent = designation;
+          $('#helpModalPhone').textContent = phone;
+          $('#helpModalEmail').textContent = email;
+          $('#helpModal').classList.remove('hidden');
         });
-        tbody.appendChild(tr);
+
+        container.appendChild(card);
+      });
+
+      $('#closeHelpModal').addEventListener('click', () => {
+        $('#helpModal').classList.add('hidden');
+      });
+
+      window.addEventListener('click', (e) => {
+        if (e.target.id === 'helpModal') {
+          $('#helpModal').classList.add('hidden');
+        }
       });
     })
     .catch(err => console.error('📛 Helpdesk fetch fail:', err));
 }
+
+
 
 /*****************
   Bus Time Sheet Integration
