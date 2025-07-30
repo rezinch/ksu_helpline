@@ -55,10 +55,16 @@ function setupTabs() {
   };
 
   hideAllPanels();
-  $('#helpdesk').classList.remove('hidden');
+const savedTab = localStorage.getItem('ksu_active_tab') || 'helpdesk';
+const savedSection = $(`#${savedTab}`);
+if (savedSection) savedSection.classList.remove('hidden');
+currentTab = savedTab;
+
 
   const switchTab = tabName => {
     if (!tabName || tabName === currentTab) return;
+    localStorage.setItem('ksu_active_tab', tabName);
+
 
     hideAllPanels();
     const nextPanel = $(`#${tabName}`);
