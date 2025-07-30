@@ -1,4 +1,4 @@
-# KSU CUCEK – Campus Essentials
+# KSU CUCEK – Campus Essential
 
 
 ## 🔗 Linked Google Sheets
