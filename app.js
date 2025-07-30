@@ -1,8 +1,14 @@
+// app.js
+
 // Utility selectors
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
-let currentTab = 'helpdesk';
+// Use an object to track which data has been requested
+const dataLoadState = {
+  bus: false,
+  hostels: false
+};
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initApp);
@@ -19,73 +25,72 @@ function initApp() {
     setupSyllabusForm();
     setupHostelSearch();
     setupGSAP();
-
-    loadHostelsFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vSd2pseQ2OZxE-mkiay67QzpAXiLvgSRbyL2XMSzYMdi9tKA0tig4yAfO3StD2Qjy5JviQUXBUFHyma/pub?output=csv', 'girlsTable');
-    loadHostelsFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vR9pa4oleYUmJSP3Bg6l7s0FTEdFneJbM8UHraJCmjTFOiYjlLwh5bOLmWYaCa84GlX1z6LQz8fQZPU/pub?output=csv', 'boysTable');
-
-    loadBusTimes('https://docs.google.com/spreadsheets/d/e/2PACX-1vR6-Xq1Ko2HSmZ4_wRjcLKW4G5S8FGGGpcRmPFwE_R7epKZ6ZRovs-91r2MZiws1nuYk3euXaQeeA_n/pub?output=csv&t=' + Date.now(), 'busTimesAlappuzha');
-    loadBusTimes('https://docs.google.com/spreadsheets/d/e/2PACX-1vQVFgYQra9dDafW-wKUhs-hSl2nBEKzlCNoAKDP-mTKHMv9uZdrJtrZs8LcHmcFG-4xYJuTndb6s1_Q/pub?output=csv&t=' + Date.now(), 'busTimesKayalpuram');
-
-    // loadHelpdeskFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vQeSFVcp3wLyJqeblxj2H3ZQyOlADqFKSbsHZH0PFl4EjFWHNxQHedGJjmMCXvs8RqvuQcLodt5mt5a/pub?output=csv');
   } catch (err) {
     console.error('[KSU-CUCEK] Init error:', err);
   }
 }
 
 /*****************
-  Tabs Navigation
+  Tabs Navigation (REVISED LOGIC)
 *****************/
 function setupTabs() {
-  const tabButtons = $$('.tab-btn');
-  const mobileBtns = $$('.mobile-tab-btn');
-  const stripBtns = $$('.tab-strip-btn');
-  const allButtons = [...tabButtons, ...mobileBtns, ...stripBtns];
+  const allButtons = $$('.tab-btn, .mobile-tab-btn, .tab-strip-btn');
   const allSections = $$('.tab-content');
 
-  const hideAllPanels = () => {
-    allSections.forEach(sec => sec.classList.add('hidden'));
-  };
-
-  hideAllPanels();
-const savedTab = localStorage.getItem('ksu_active_tab') || 'helpdesk';
-const savedSection = $(`#${savedTab}`);
-if (savedSection) savedSection.classList.remove('hidden');
-currentTab = savedTab;
-
-  allButtons.forEach(btn => {
-  const isActive = btn.dataset.tab === savedTab;
-  btn.classList.toggle('active', isActive);
-  if (btn.hasAttribute('aria-selected')) {
-    btn.setAttribute('aria-selected', String(isActive));
+  // This function ONLY loads data if it hasn't been loaded before
+  function loadDataForTab(tabName) {
+    if (tabName === 'bus' && !dataLoadState.bus) {
+      dataLoadState.bus = true; // Mark as "requested" immediately
+      loadBusTimes('https://docs.google.com/spreadsheets/d/e/2PACX-1vR6-Xq1Ko2HSmZ4_wRjcLKW4G5S8FGGGpcRmPFwE_R7epKZ6ZRovs-91r2MZiws1nuYk3euXaQeeA_n/pub?output=csv&t=' + Date.now(), 'busTimesAlappuzha');
+      loadBusTimes('https://docs.google.com/spreadsheets/d/e/2PACX-1vQVFgYQra9dDafW-wKUhs-hSl2nBEKzlCNoAKDP-mTKHMv9uZdrJtrZs8LcHmcFG-4xYJuTndb6s1_Q/pub?output=csv&t=' + Date.now(), 'busTimesKayalpuram');
+    }
+    
+    if (tabName === 'hostels' && !dataLoadState.hostels) {
+      dataLoadState.hostels = true; // Mark as "requested" immediately
+      loadHostelsFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vSd2pseQ2OZxE-mkiay67QzpAXiLvgSRbyL2XMSzYMdi9tKA0tig4yAfO3StD2Qjy5JviQUXBUFHyma/pub?output=csv', 'girlsTable');
+      loadHostelsFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vR9pa4oleYUmJSP3Bg6l7s0FTEdFneJbM8UHraJCmjTFOiYjlLwh5bOLmWYaCa84GlX1z6LQz8fQZPU/pub?output=csv', 'boysTable');
+    }
   }
-});
+  
+  // This function ONLY handles showing/hiding the correct UI elements
+  function showTab(tabName) {
+    if (!tabName) return;
 
-
-  const switchTab = tabName => {
-    if (!tabName || tabName === currentTab) return;
     localStorage.setItem('ksu_active_tab', tabName);
 
-
-    hideAllPanels();
-    const nextPanel = $(`#${tabName}`);
-    if (nextPanel) nextPanel.classList.remove('hidden');
-    currentTab = tabName;
-
     allButtons.forEach(btn => {
-      const isActive = btn.dataset.tab === tabName;
-      btn.classList.toggle('active', isActive);
-      if (btn.hasAttribute('aria-selected')) {
-        btn.setAttribute('aria-selected', String(isActive));
-      }
+      btn.classList.toggle('active', btn.dataset.tab === tabName);
     });
 
-    if (!$('#mobileMenu').classList.contains('hidden')) {
-      toggleMobileMenu();
+    allSections.forEach(sec => {
+      sec.classList.toggle('hidden', sec.id !== tabName);
+    });
+    
+    // --- THIS IS THE FIX ---
+    // After showing a new tab, tell GSAP's ScrollTrigger to update its calculations.
+    if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
     }
-  };
+    
+    loadDataForTab(tabName);
+  }
 
-  allButtons.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+  allButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tabName = btn.dataset.tab;
+      showTab(tabName);
+      
+      if (!$('#mobileMenu').classList.contains('hidden')) {
+        toggleMobileMenu();
+      }
+    });
+  });
+
+  const savedTab = localStorage.getItem('ksu_active_tab') || 'helpdesk';
+  showTab(savedTab);
 }
+
 
 /*****************
   Mobile Menu
@@ -120,25 +125,14 @@ function setupDarkMode() {
   };
 
   const storedTheme = localStorage.getItem('ksu_theme');
-const isDark = storedTheme === 'dark';
-checkbox.checked = isDark;
-applyTheme(isDark);
+  const isDark = storedTheme === 'dark';
+  checkbox.checked = isDark;
+  applyTheme(isDark);
 
   checkbox.addEventListener('change', () => {
     applyTheme(checkbox.checked);
     localStorage.setItem('ksu_theme', checkbox.checked ? 'dark' : 'light');
   });
-
-  const slider = checkbox.nextElementSibling;
-  if (slider) {
-    slider.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      checkbox.checked = !checkbox.checked;
-      applyTheme(checkbox.checked);
-       localStorage.setItem('ksu_theme', checkbox.checked ? 'dark' : 'light');
-    });
-  }
 }
 
 /*****************
@@ -244,32 +238,30 @@ function setupHostelSearch() {
   const girlsSec = $('#girlsSection');
 
   if (boysBtn && girlsBtn && boysSec && girlsSec) {
-    // Hide both sections initially
     boysSec.style.display = 'none';
     girlsSec.style.display = 'none';
 
     boysBtn.addEventListener('click', () => {
-  girlsSec.style.display = 'none';
-  girlsSec.classList.remove('hostel-slide-in');
+      girlsSec.style.display = 'none';
+      girlsSec.classList.remove('hostel-slide-in');
 
-  boysSec.style.display = 'block';
-  boysSec.classList.add('hostel-slide-in');
+      boysSec.style.display = 'block';
+      boysSec.classList.add('hostel-slide-in');
 
-  boysBtn.classList.add('active');
-  girlsBtn.classList.remove('active');
-});
+      boysBtn.classList.add('active');
+      girlsBtn.classList.remove('active');
+    });
 
-girlsBtn.addEventListener('click', () => {
-  boysSec.style.display = 'none';
-  boysSec.classList.remove('hostel-slide-in');
+    girlsBtn.addEventListener('click', () => {
+      boysSec.style.display = 'none';
+      boysSec.classList.remove('hostel-slide-in');
 
-  girlsSec.style.display = 'block';
-  girlsSec.classList.add('hostel-slide-in');
+      girlsSec.style.display = 'block';
+      girlsSec.classList.add('hostel-slide-in');
 
-  girlsBtn.classList.add('active');
-  boysBtn.classList.remove('active');
-});
-
+      girlsBtn.classList.add('active');
+      boysBtn.classList.remove('active');
+    });
   }
 }
 
@@ -284,7 +276,7 @@ function setupGSAP() {
   }
 
   gsap.registerPlugin(ScrollTrigger);
-
+  
   $$('.section-animate').forEach(sec => {
     gsap.from(sec, {
       opacity: 0,
@@ -297,21 +289,6 @@ function setupGSAP() {
       }
     });
   });
-
-  const helpdeskRows = $$('#helpdeskTable .table-row-animate');
-  if (helpdeskRows.length) {
-    gsap.from(helpdeskRows, {
-      opacity: 0,
-      x: -15,
-      duration: 0.45,
-      stagger: 0.07,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: '#helpdeskTable',
-        start: 'top 80%'
-      }
-    });
-  }
 
   $$('.scale-animate').forEach(card => {
     gsap.from(card, {
@@ -337,83 +314,27 @@ function setupGSAP() {
 }
 
 /*****************
-  Helpdesk Sheet Integration
-*****************/
-// function loadHelpdeskFromSheet(csvUrl) {
-//   fetch(csvUrl)
-//     .then(res => res.text())
-//     .then(csv => {
-//       const rows = csv.trim().split('\n').map(r => r.split(','));
-//       const [headers, ...dataRows] = rows;
-
-//       const headingIndex = headers.findIndex(h => h.toLowerCase().includes('heading'));
-//       const nameIndex = headers.findIndex(h => h.toLowerCase().includes('name'));
-//       const roleIndex = headers.findIndex(h => h.toLowerCase().includes('designation'));
-//       const phoneIndex = headers.findIndex(h => h.toLowerCase().includes('phone'));
-//       const emailIndex = headers.findIndex(h => h.toLowerCase().includes('email'));
-//       const emojiIndex = headers.findIndex(h => h.toLowerCase().includes('emoji'));
-
-//       const container = document.getElementById('helpdeskCards');
-//       if (!container) return;
-//       container.innerHTML = '';
-
-//       dataRows.forEach(row => {
-//         const heading = row[headingIndex] || '';
-//         const name = row[nameIndex] || '';
-//         const d      esignation = row[roleIndex] || '';
-//         const phone = row[phoneIndex] || '';
-//         const email = row[emailIndex] || '';
-//         const emoji = emojiIndex !== -1 ? row[emojiIndex] || '📞' : '📞';
-
-//         const card = document.createElement('figure');
-//         card.className = 'qr-card hover-lift help-card';
-//         card.tabIndex = 0;
-//         card.innerHTML = `
-//           <div class="qr-placeholder">${emoji}</div>
-//           <figcaption>${heading}</figcaption>
-//           <p class="qr-desc">${designation}</p>
-//         `;
-
-//         card.addEventListener('click', () => {
-//           $('#helpModalHeading').textContent = heading;
-//           $('#helpModalName').textContent = name;
-//           $('#helpModalRole').textContent = designation;
-//           $('#helpModalPhone').textContent = phone;
-//           $('#helpModalEmail').textContent = email;
-//           $('#helpModal').classList.remove('hidden');
-//         });
-
-//         container.appendChild(card);
-//       });
-
-//       $('#closeHelpModal').addEventListener('click', () => {
-//         $('#helpModal').classList.add('hidden');
-//       });
-
-//       window.addEventListener('click', (e) => {
-//         if (e.target.id === 'helpModal') {
-//           $('#helpModal').classList.add('hidden');
-//         }
-//       });
-//     })
-//     .catch(err => console.error('📛 Helpdesk fetch fail:', err));
-// }
-
-
-
-/*****************
-  Bus Time Sheet Integration
+  Data Fetching Functions (with better loading/error states)
 *****************/
 function loadBusTimes(csvUrl, tbodyId) {
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  
+  const colCount = tbody.previousElementSibling.firstElementChild.childElementCount || 4;
+  tbody.innerHTML = `<tr><td colspan="${colCount}">Loading...</td></tr>`;
+
   fetch(csvUrl)
-    .then(res => res.text())
+    .then(res => res.ok ? res.text() : Promise.reject(new Error(`Network response was not ok. Status: ${res.status}`)))
     .then(csv => {
       const rows = csv.trim().split('\n').map(r => r.split(','));
-      const [headers, ...dataRows] = rows;
+      const dataRows = rows.slice(1);
+      
+      tbody.innerHTML = ''; 
 
-      const tbody = document.getElementById(tbodyId);
-      if (!tbody) return;
-      tbody.innerHTML = '';
+      if(dataRows.length === 0 || (dataRows.length === 1 && dataRows[0].every(cell => !cell.trim()))) {
+          tbody.innerHTML = `<tr><td colspan="${colCount}">No timings available.</td></tr>`;
+          return;
+      }
 
       dataRows.forEach(row => {
         const tr = document.createElement('tr');
@@ -425,33 +346,46 @@ function loadBusTimes(csvUrl, tbodyId) {
         tbody.appendChild(tr);
       });
     })
-    .catch(err => console.error(`📛 Failed to load ${tbodyId}`, err));
+    .catch(err => {
+      console.error(`Failed to load ${tbodyId}:`, err);
+      tbody.innerHTML = `<tr><td colspan="${colCount}">Error loading data.</td></tr>`;
+    });
 }
-/*****************
-  Hostel Sheet Integration
-*****************/
+
 function loadHostelsFromSheet(csvUrl, tableId) {
+    const tbody = document.getElementById(tableId);
+    if (!tbody) return;
+    
+    const colCount = tbody.previousElementSibling.firstElementChild.childElementCount || 2;
+    tbody.innerHTML = `<tr><td colspan="${colCount}">Loading...</td></tr>`;
+    
   fetch(csvUrl)
-    .then(res => res.text())
+    .then(res => res.ok ? res.text() : Promise.reject(new Error(`Network response was not ok. Status: ${res.status}`)))
     .then(csv => {
       const rows = csv.trim().split('\n').map(r => r.split(','));
-      const [headers, ...dataRows] = rows;
-
-      const tbody = document.getElementById(tableId);
-      if (!tbody) return;
+      const dataRows = rows.slice(1);
 
       tbody.innerHTML = '';
+
+      if(dataRows.length === 0 || (dataRows.length === 1 && dataRows[0].every(cell => !cell.trim()))) {
+          tbody.innerHTML = `<tr><td colspan="${colCount}">No hostels listed.</td></tr>`;
+          return;
+      }
+
       dataRows.forEach(row => {
         const tr = document.createElement('tr');
         tr.classList.add('hostel-row');
         tr.dataset.name = row[0].toLowerCase();
         row.forEach(cell => {
           const td = document.createElement('td');
-          td.textContent = cell;
+          td.textContent = cell.trim();
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
       });
     })
-    .catch(err => console.error(`📛 Hostel fetch failed: ${err}`));
+    .catch(err => {
+        console.error(`Hostel fetch failed: ${err}`);
+        tbody.innerHTML = `<tr><td colspan="${colCount}">Error loading data.</td></tr>`;
+    });
 }
