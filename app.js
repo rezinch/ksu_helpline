@@ -354,7 +354,9 @@ function loadHelpdeskFromSheet(csvUrl) {
 
       const table = $('#helpdeskTable');
       const tbody = table.querySelector('tbody') || table.appendChild(document.createElement('tbody'));
-      tbody.innerHTML = '';
+     if (tbody) {
+  tbody.innerHTML = ''; // remove "Loading..." row
+}
 
       dataRows.forEach(row => {
         const tr = document.createElement('tr');
