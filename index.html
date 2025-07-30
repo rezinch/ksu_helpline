@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +10,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
+
 <body data-color-scheme="light">
-    
+
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -24,14 +26,17 @@
                     <button class="tab-btn active" data-tab="helpdesk" role="tab" aria-selected="true">Helpdesk</button>
                     <button class="tab-btn" data-tab="bus" role="tab" aria-selected="false">Bus Timings</button>
                     <button class="tab-btn" data-tab="syllabus" role="tab" aria-selected="false">Syllabus</button>
-                    <button class="tab-btn" data-tab="hostels" role="tab" aria-selected="false">Approved Hostels</button>
-                    <button class="tab-btn" data-tab="qrcodes" role="tab" aria-selected="false">Additional Links</button>
+                    <button class="tab-btn" data-tab="hostels" role="tab" aria-selected="false">Approved
+                        Hostels</button>
+                    <button class="tab-btn" data-tab="qrcodes" role="tab" aria-selected="false">Additional
+                        Links</button>
                 </div>
             </nav>
             <!-- Header Controls -->
             <div class="header-controls">
                 <!-- Mobile Menu Hamburger -->
-                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu"
+                    aria-expanded="false">
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
@@ -78,6 +83,17 @@
                 <p class="section-description">Contact Us</p>
             </div>
             <div id="helpdeskCards" class="qr-grid"></div>
+
+            <div id="modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); 
+    background:#fff; padding:20px 30px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
+                <span id="closeModal"
+                    style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px;">&times;</span>
+                <h2 id="modalHead"></h2>
+                <div id="modalContent"></div>
+            </div>
+            <div id="overlay"
+                style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#ffffff00; z-index:999;">
+            </div>
         </section>
 
         <!-- 2. Bus Timings -->
@@ -87,49 +103,54 @@
                 <p class="section-description">Daily schedules for popular routes</p>
             </div>
             <div class="bus-routes">
-  <!-- Route A–>B -->
-  <div class="route-section scale-animate">
-    <h3>Alappuzha ↔ Kaavalam / Thattassery</h3>
-    <div class="table-wrapper">
-      <table class="data-table">
-        <thead>
-           <th>From Station</th>
-            <th>Time</th>
-            <th class="divider">From Station</th>
-            <th>Time</th>
-        </thead>
-        <tbody id="busTimesAlappuzha">
-            <tr><td>Loading...</td></tr>
-          <!-- Times will be injected here from sheet -->
-        </tbody>
-      </table>
-    </div>
-  </div>
+                <!-- Route A–>B -->
+                <div class="route-section scale-animate">
+                    <h3>Alappuzha ↔ Kaavalam / Thattassery</h3>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <th>From Station</th>
+                                <th>Time</th>
+                                <th class="divider">From Station</th>
+                                <th>Time</th>
+                            </thead>
+                            <tbody id="busTimesAlappuzha">
+                                <tr>
+                                    <td>Loading...</td>
+                                </tr>
+                                <!-- Times will be injected here from sheet -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-  <!-- Route B–>C -->
-  <div class="route-section scale-animate">
-    <h3>Kayalpuram ↔ Changanassery</h3>
-    <div class="table-wrapper">
-      <table class="data-table">
-        <thead>
-           <th>From Station</th>
-            <th>Time</th>
-            <th class="divider">From Station</th>
-            <th>Time</th>
-        </thead>
-        <tbody id="busTimesKayalpuram">
-            <tr><td>Loading...</td></tr>
-          <!-- Times will be injected here from sheet -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+                <!-- Route B–>C -->
+                <div class="route-section scale-animate">
+                    <h3>Kayalpuram ↔ Changanassery</h3>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <th>From Station</th>
+                                <th>Time</th>
+                                <th class="divider">From Station</th>
+                                <th>Time</th>
+                            </thead>
+                            <tbody id="busTimesKayalpuram">
+                                <tr>
+                                    <td>Loading...</td>
+                                </tr>
+                                <!-- Times will be injected here from sheet -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
         </section>
 
         <!-- 3. Syllabus -->
-        <section id="syllabus" class="tab-content section-animate hidden" role="tabpanel" aria-labelledby="tab-syllabus">
+        <section id="syllabus" class="tab-content section-animate hidden" role="tabpanel"
+            aria-labelledby="tab-syllabus">
             <div class="section-header">
                 <h2>Syllabus</h2>
                 <p class="section-description">Download syllabus documents for your branch &amp; scheme</p>
@@ -155,7 +176,8 @@
                         </select>
                     </div>
                 </div>
-                <button class="btn btn--primary btn--lg download-btn hidden" id="downloadBtn">📥 Download Syllabus</button>
+                <button class="btn btn--primary btn--lg download-btn hidden" id="downloadBtn">📥 Download
+                    Syllabus</button>
             </div>
         </section>
 
@@ -166,27 +188,32 @@
                 <p class="section-description">Find comfortable &amp; safe accommodation</p>
             </div>
             <div class="hostel-switch hostel-toggle-buttons">
-            <button id="boysBtn" class="btn btn--primary">Boys Hostel</button>
-            <button id="girlsBtn" class="btn btn--primary">Girls Hostel</button>
+                <button id="boysBtn" class="btn btn--primary">Boys Hostel</button>
+                <button id="girlsBtn" class="btn btn--primary">Girls Hostel</button>
             </div>
 
-            
+
 
             <div class="hostels-container">
                 <!-- Boys Hostels Accordion -->
                 <div class="hostels-section" id="boysSection" style="display: none;">
                     <div class="hostels-header">
                         <h3>Boys Hostels</h3>
-                        
+
                     </div>
                     <div class="hostels-content" id="boysContent">
                         <div class="table-wrapper">
                             <table class="data-table">
                                 <thead>
-                                    <tr><th>Name</th><th>Phone</th></tr>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                    </tr>
                                 </thead>
                                 <tbody id="boysTable">
-                                    <tr><td>Loading...</td></tr>
+                                    <tr>
+                                        <td>Loading...</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -196,16 +223,21 @@
                 <div class="hostels-section" id="girlsSection" style="display: none;">
                     <div class="hostels-header" data-target="girlsTable">
                         <h3>Girls Hostels</h3>
-                        
+
                     </div>
                     <div class="hostels-content" id="girlsContent">
                         <div class="table-wrapper">
                             <table class="data-table">
                                 <thead>
-                                    <tr><th>Name</th><th>Phone</th></tr>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                    </tr>
                                 </thead>
                                 <tbody id="girlsTable">
-                                    <tr><td>Loading...</td></tr>
+                                    <tr>
+                                        <td>Loading...</td>
+                                    </tr>
                                     <!-- Dynamic rows will be injected here -->
                                 </tbody>
                             </table>
@@ -222,37 +254,34 @@
                 <p class="section-description">Quick access to important resources</p>
             </div>
             <div class="qr-grid">
-               
-
-                <a href="https://cucek.cusat.ac.in/?page=3" target="_blank" rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr2" style="text-decoration: none;">
-                <div class="qr-placeholder">👨‍🏫</div>
-                <figcaption>Faculty Directory</figcaption>
-                <p class="qr-desc">Contact faculty members</p>
-                </a>
-                <a href="https://admissions.cusat.ac.in/Files/FEE%20STRUCTURE%202024-FINAL1.pdf" target="_blank" rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr3" style="text-decoration: none;">
-                <div class="qr-placeholder">💰</div>
-                <figcaption>Fee Structure</figcaption>
-                <p class="qr-desc">View current fee details</p>
+                <a href="whatsapp" target="_blank" rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr1"
+                    style="text-decoration: none;">
+                    <div class="qr-placeholder">
+                        <img src="items/whatsapp.png" alt="WhatsApp Icon"
+                            style="width: 2.25rem; height: 2.25rem; object-fit: contain;">
+                    </div>
+                    <figcaption>WhatsApp Group</figcaption>
+                    <p class="qr-desc">Join our WhatsApp community</p>
                 </a>
 
-               <a href="https://cucek.cusat.ac.in/files/regulations.pdf" target="_blank" rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr4" style="text-decoration: none;">
-                <div class="qr-placeholder">📋</div>
-                <figcaption>Academic Regulations</figcaption>
-                 <p class="qr-desc">Academic rules and guidelines</p>
+                <a href="https://cucek.cusat.ac.in/?page=3" target="_blank" rel="noopener noreferrer"
+                    class="qr-card hover-lift" data-qr="qr2" style="text-decoration: none;">
+                    <div class="qr-placeholder">👨‍🏫</div>
+                    <figcaption>Faculty Directory</figcaption>
+                    <p class="qr-desc">Contact faculty members</p>
                 </a>
-                 <a href="https://chat.whatsapp.com/F9n2thbfS8XDoAhHaIuSCb?mode=ac_t" target="_blank" rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr1" style="text-decoration: none;">
-                <div class="qr-placeholder">
-                 <img src="items/whatsapp.png" alt="WhatsApp Icon" style="width: 2.25rem; height: 2.25rem; object-fit: contain;">
-                </div>
-                <figcaption>WhatsApp Group</figcaption>
-                 <p class="qr-desc">Join our WhatsApp community</p>
+                <a href="https://admissions.cusat.ac.in/Files/FEE%20STRUCTURE%202024-FINAL1.pdf" target="_blank"
+                    rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr3" style="text-decoration: none;">
+                    <div class="qr-placeholder">💰</div>
+                    <figcaption>Fee Structure</figcaption>
+                    <p class="qr-desc">View current fee details</p>
                 </a>
-                 <a href="https://www.instagram.com/ksu_cucek/?hl=en" target="_blank" rel="noopener noreferrer" class="qr-card hover-lift" data-qr="qr1" style="text-decoration: none;">
-                <div class="qr-placeholder">
-                 <img src="items/insta.png" alt="Instagram Icon" style="width: 2.25rem; height: 2.25rem; object-fit: contain;">
-                </div>
-                <figcaption>Instagram Page</figcaption>
-                 <p class="qr-desc">Follow Us on Instagram</p>
+
+                <a href="https://cucek.cusat.ac.in/files/regulations.pdf" target="_blank" rel="noopener noreferrer"
+                    class="qr-card hover-lift" data-qr="qr4" style="text-decoration: none;">
+                    <div class="qr-placeholder">📋</div>
+                    <figcaption>Academic Regulations</figcaption>
+                    <p class="qr-desc">Academic rules and guidelines</p>
                 </a>
 
             </div>
@@ -265,19 +294,21 @@
             <p>By KSU CUCEK</p>
         </div>
     </footer>
-<!-- 📦 Helpdesk Popup Modal -->
-<div id="helpModal" class="help-modal hidden">
-  <div class="help-modal-content">
-    <span id="closeHelpModal" class="help-modal-close">&times;</span>
-    <h3 id="helpModalHeading" class="help-modal-heading"></h3>
-    <p id="helpModalName" class="help-modal-name"></p>
-    <p id="helpModalRole" class="help-modal-role"></p>
-    <p id="helpModalPhone" class="help-modal-phone"></p>
-    <p id="helpModalEmail" class="help-modal-email"></p>
-  </div>
-</div>
+    <!-- 📦 Helpdesk Popup Modal -->
+    <div id="helpModal" class="help-modal hidden">
+        <div class="help-modal-content">
+            <span id="closeHelpModal" class="help-modal-close">&times;</span>
+            <h3 id="helpModalHeading" class="help-modal-heading"></h3>
+            <p id="helpModalName" class="help-modal-name"></p>
+            <p id="helpModalRole" class="help-modal-role"></p>
+            <p id="helpModalPhone" class="help-modal-phone"></p>
+            <p id="helpModalEmail" class="help-modal-email"></p>
+        </div>
+    </div>
 
     <!-- Application JS -->
     <script src="app.js"></script>
+    <script src="./helpdesk.js"></script>
 </body>
+
 </html>
