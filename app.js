@@ -19,20 +19,12 @@ function initApp() {
     setupSyllabusForm();
     setupHostelSearch();
     setupGSAP();
-    loadHostelsFromSheet(
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSd2pseQ2OZxE-mkiay67QzpAXiLvgSRbyL2XMSzYMdi9tKA0tig4yAfO3StD2Qjy5JviQUXBUFHyma/pub?output=csv',
-  'girlsTable'
-);
 
-    loadHostelsFromSheet(
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9pa4oleYUmJSP3Bg6l7s0FTEdFneJbM8UHraJCmjTFOiYjlLwh5bOLmWYaCa84GlX1z6LQz8fQZPU/pub?output=csv', 
-  'boysTable'
-);
+    loadHostelsFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vSd2pseQ2OZxE-mkiay67QzpAXiLvgSRbyL2XMSzYMdi9tKA0tig4yAfO3StD2Qjy5JviQUXBUFHyma/pub?output=csv', 'girlsTable');
+    loadHostelsFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vR9pa4oleYUmJSP3Bg6l7s0FTEdFneJbM8UHraJCmjTFOiYjlLwh5bOLmWYaCa84GlX1z6LQz8fQZPU/pub?output=csv', 'boysTable');
 
     loadBusTimes('https://docs.google.com/spreadsheets/d/e/2PACX-1vR6-Xq1Ko2HSmZ4_wRjcLKW4G5S8FGGGpcRmPFwE_R7epKZ6ZRovs-91r2MZiws1nuYk3euXaQeeA_n/pub?output=csv&t=' + Date.now(), 'busTimesAlappuzha');
-
     loadBusTimes('https://docs.google.com/spreadsheets/d/e/2PACX-1vQVFgYQra9dDafW-wKUhs-hSl2nBEKzlCNoAKDP-mTKHMv9uZdrJtrZs8LcHmcFG-4xYJuTndb6s1_Q/pub?output=csv&t=' + Date.now(), 'busTimesKayalpuram');
-
 
     loadHelpdeskFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vQeSFVcp3wLyJqeblxj2H3ZQyOlADqFKSbsHZH0PFl4EjFWHNxQHedGJjmMCXvs8RqvuQcLodt5mt5a/pub?output=csv');
   } catch (err) {
@@ -246,57 +238,41 @@ function setupSyllabusForm() {
   Hostels Section
 *****************/
 function setupHostelSearch() {
-  const searchBox = $('#globalSearch');
-  if (!searchBox) return;
+  const boysBtn = $('#boysBtn');
+  const girlsBtn = $('#girlsBtn');
+  const boysSec = $('#boysSection');
+  const girlsSec = $('#girlsSection');
 
-  const getAllHostelRows = $$('.hostel-row');
+  if (boysBtn && girlsBtn && boysSec && girlsSec) {
+    // Hide both sections initially
+    boysSec.style.display = 'none';
+    girlsSec.style.display = 'none';
 
-  const filterRows = () => {
-    const query = searchBox.value.toLowerCase().trim();
-    getAllHostelRows.forEach(row => {
-      const hostelName = row.dataset.name || '';
-      const matches = hostelName.includes(query);
-      row.classList.toggle('filtered', query && !matches);
-    });
-  };
+    boysBtn.addEventListener('click', () => {
+  girlsSec.style.display = 'none';
+  girlsSec.classList.remove('hostel-slide-in');
 
-  searchBox.addEventListener('input', filterRows);
+  boysSec.style.display = 'block';
+  boysSec.classList.add('hostel-slide-in');
 
-  $$('.hostels-header').forEach(header => {
-    const content = header.nextElementSibling;
-    if (!content) return;
+  boysBtn.classList.add('active');
+  girlsBtn.classList.remove('active');
+});
 
-    content.classList.remove('collapsed', 'hidden');
-    content.style.display = 'block';
-    content.style.maxHeight = 'none';
-    content.style.overflow = 'visible';
+girlsBtn.addEventListener('click', () => {
+  boysSec.style.display = 'none';
+  boysSec.classList.remove('hostel-slide-in');
 
-    header.classList.remove('collapsed');
+  girlsSec.style.display = 'block';
+  girlsSec.classList.add('hostel-slide-in');
 
-    header.addEventListener('click', function(e) {
-      e.preventDefault();
-      const isCollapsed = content.classList.contains('collapsed');
-      if (isCollapsed) {
-        content.classList.remove('collapsed');
-        header.classList.remove('collapsed');
-        content.style.maxHeight = 'none';
-        content.style.overflow = 'visible';
-      } else {
-        content.classList.add('collapsed');
-        header.classList.add('collapsed');
-        content.style.maxHeight = '0px';
-        content.style.overflow = 'hidden';
-      }
-    });
-  });
+  girlsBtn.classList.add('active');
+  boysBtn.classList.remove('active');
+});
 
-  $$('.hostels-content').forEach(content => {
-    content.classList.remove('collapsed', 'hidden');
-    content.style.display = 'block';
-    content.style.maxHeight = 'none';
-    content.style.overflow = 'visible';
-  });
+  }
 }
+
 
 /*****************
   GSAP Animations
