@@ -1,6 +1,6 @@
 # KSU CUCEK – Campus Essentials
 
-This project serves as a central portal for key information like helpdesk contacts, bus timings, syllabus downloads, approved hostels, and important QR codes for CUCEK students.
+
 
 ---
 
