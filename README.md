@@ -1,9 +1,6 @@
 # KSU CUCEK – Campus Essentials
 
 
-
----
-
 ## 🔗 Linked Google Sheets
 
 ### 📞 Helpdesk Sheet  
