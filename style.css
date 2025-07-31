@@ -1091,7 +1091,7 @@
     border: 1px solid var(--color-card-border);
     border-radius: var(--radius-lg);
     font-size: clamp(var(--font-size-sm), 2.5vw, var(--font-size-base));
-    table-layout: fixed; /* important for equal-width columns */
+   /* table-layout: fixed;  important for equal-width columns */
   }
 
   .data-table th,
@@ -1133,11 +1133,11 @@
   /********************
     Bus Routes
   *********************/
-  .bus-routes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: clamp(var(--space-16), 4vw, var(--space-32));
-  }
+.bus-routes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(var(--space-16), 4vw, var(--space-32));
+}
 
   .route-section {
     background: var(--color-surface);
