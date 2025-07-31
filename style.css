@@ -1725,7 +1725,7 @@
 
 /* Optional: Add a simple animation to the logo */
 #preloader img {
-  width: 250px; /* Adjust size as needed */
+  /*width: 250px;  Adjust size as needed */
   animation: pulse 1.5s infinite;
 }
 
