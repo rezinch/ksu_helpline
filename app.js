@@ -52,14 +52,14 @@ if(installBtn) {
   });
 }
 
-window.addEventListener('appinstalled', () => {
+/* window.addEventListener('appinstalled', () => {
   // Hide the install button if the app is installed
   if(installBtn) {
     installBtn.style.display = 'none';
   }
   deferredPrompt = null;
   console.log('KSU CUCEK app was installed.');
-});
+}); */
 // --- END OF PWA LOGIC ---
 
 
@@ -467,3 +467,5 @@ function trackVisit() {
     console.error('Error calling the tracking script:', error);
   });
 }
+
+
