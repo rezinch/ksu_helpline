@@ -10,6 +10,59 @@ const dataLoadState = {
   hostels: false
 };
 
+// --- PWA INSTALLATION LOGIC ---
+let deferredPrompt; // This variable will hold the install prompt event
+const installBtn = document.getElementById('installBtn');
+
+// This function will register the service worker
+function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+                console.error('Service Worker registration failed:', error);
+            });
+    }
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // By not calling e.preventDefault(), we allow the browser to show its default install prompt.
+  
+  // Stash the event so it can be triggered by our custom button later.
+  deferredPrompt = e;
+  // Show our custom install button as a fallback.
+  if(installBtn) {
+    installBtn.style.display = 'block';
+  }
+});
+
+if(installBtn) {
+  installBtn.addEventListener('click', async () => {
+    // Hide the install button
+    installBtn.style.display = 'none';
+    // Show the install prompt
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
+    // We've used the prompt, and can't use it again, so clear it
+    deferredPrompt = null;
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  // Hide the install button if the app is installed
+  if(installBtn) {
+    installBtn.style.display = 'none';
+  }
+  deferredPrompt = null;
+  console.log('KSU CUCEK app was installed.');
+});
+// --- END OF PWA LOGIC ---
+
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initApp);
 } else {
@@ -18,6 +71,8 @@ if (document.readyState === 'loading') {
 
 function initApp() {
   try {
+    trackVisit(); // Track the visit
+    registerServiceWorker(); // Register the service worker for PWA features
     setupTabs();
     setupMobileMenu();
     setupDarkMode();
@@ -48,7 +103,7 @@ function setupTabs() {
     if (tabName === 'hostels' && !dataLoadState.hostels) {
       dataLoadState.hostels = true; // Mark as "requested" immediately
       loadHostelsFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vSd2pseQ2OZxE-mkiay67QzpAXiLvgSRbyL2XMSzYMdi9tKA0tig4yAfO3StD2Qjy5JviQUXBUFHyma/pub?output=csv', 'girlsTable');
-      loadHostelsFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vR9pa4oleYUmJSP3Bg6l7s0FTEdFneJbM8UHraJCmjTFOiYjlLwh5bOLmWYaCa84GlX1z6LQz8fQZPU/pub?output=csv', 'boysTable');
+      loadHostelsFromSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vR9pa4oleYUmJSP3Bg6l7s0FTEdFneJbM8UHraJCmjTFOiYjlLwh5bOLmWYaCa84GlX1z6Qz8fQZPU/pub?output=csv', 'boysTable');
     }
   }
   
@@ -66,7 +121,6 @@ function setupTabs() {
       sec.classList.toggle('hidden', sec.id !== tabName);
     });
     
-    // --- THIS IS THE FIX ---
     // After showing a new tab, tell GSAP's ScrollTrigger to update its calculations.
     if (typeof ScrollTrigger !== 'undefined') {
         ScrollTrigger.refresh();
@@ -388,4 +442,28 @@ function loadHostelsFromSheet(csvUrl, tableId) {
         console.error(`Hostel fetch failed: ${err}`);
         tbody.innerHTML = `<tr><td colspan="${colCount}">Error loading data.</td></tr>`;
     });
+}
+
+// This function will track the website visit
+function trackVisit() {
+  // This is YOUR specific URL
+  const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyy8Ho7yb5316wckQdeeuuhll3uR7-o0Upoj5zJn-iCEHhDBc6kV8H8dbdUuSSRLTvV/exec';
+
+  // Make a request to your Google Apps Script
+  // We add a timestamp to prevent the browser from caching the request
+  fetch(appsScriptUrl + '?t=' + new Date().getTime(), {
+    method: 'GET',
+    mode: 'cors',
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      console.log('Visit tracked successfully. New count:', data.newCount);
+    } else {
+      console.error('The tracking script failed to update the count.');
+    }
+  })
+  .catch(error => {
+    console.error('Error calling the tracking script:', error);
+  });
 }
