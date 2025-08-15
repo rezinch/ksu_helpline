@@ -86,7 +86,7 @@ function initApp() {
 }
 
 /*****************
-  Tabs Navigation (REVISED LOGIC)
+  Tabs Navigation (REVISED LOGIC WITH DEEP LINKING)
 *****************/
 function setupTabs() {
   const allButtons = $$('.tab-btn, .mobile-tab-btn, .tab-strip-btn');
@@ -107,11 +107,14 @@ function setupTabs() {
     }
   }
   
-  // This function ONLY handles showing/hiding the correct UI elements
+  // This function handles showing/hiding UI and updating the URL
   function showTab(tabName) {
     if (!tabName) return;
 
     localStorage.setItem('ksu_active_tab', tabName);
+
+    // This reliably updates the URL hash
+    window.location.hash = tabName;
 
     allButtons.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.tab === tabName);
@@ -121,7 +124,6 @@ function setupTabs() {
       sec.classList.toggle('hidden', sec.id !== tabName);
     });
     
-    // After showing a new tab, tell GSAP's ScrollTrigger to update its calculations.
     if (typeof ScrollTrigger !== 'undefined') {
         ScrollTrigger.refresh();
     }
@@ -141,10 +143,28 @@ function setupTabs() {
     });
   });
 
-  const savedTab = localStorage.getItem('ksu_active_tab') || 'helpdesk';
-  showTab(savedTab);
-}
+  // --- THIS IS THE CRITICAL PART FOR PAGE LOAD ---
+  // This function determines which tab to show when the page first loads.
+  function getInitialTab() {
+    // 1. Check for a valid tab name in the URL hash
+    const tabFromHash = window.location.hash.substring(1);
+    if (tabFromHash && $(`#${tabFromHash}`)) {
+      return tabFromHash;
+    }
+    
+    // 2. If no hash, check local storage for the last visited tab
+    const tabFromStorage = localStorage.getItem('ksu_active_tab');
+    if (tabFromStorage && $(`#${tabFromStorage}`)) {
+      return tabFromStorage;
+    }
+    
+    // 3. If nothing else, default to the helpdesk tab
+    return 'helpdesk';
+  }
 
+  const initialTab = getInitialTab();
+  showTab(initialTab);
+}
 
 /*****************
   Mobile Menu
