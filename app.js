@@ -71,7 +71,6 @@ if (document.readyState === 'loading') {
 
 function initApp() {
   try {
-    //trackVisit(); // Track the visit
     registerServiceWorker(); // Register the service worker for PWA features
     setupTabs();
     setupMobileMenu();
@@ -458,29 +457,5 @@ function loadHostelsFromSheet(jsonUrl, tableId) {
     });
 }
 
-// This function will track the website visit
-/*function trackVisit() {
-  // This is YOUR specific URL
-  const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyy8Ho7yb5316wckQdeeuuhll3uR7-o0Upoj5zJn-iCEHhDBc6kV8H8dbdUuSSRLTvV/exec';
 
-  // Make a request to your Google Apps Script
-  // We add a timestamp to prevent the browser from caching the request
-  fetch(appsScriptUrl + '?t=' + new Date().getTime(), {
-    method: 'GET',
-    mode: 'cors',
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'success') {
-      console.log('Visit tracked successfully. New count:', data.newCount);
-    } else {
-      console.error('The tracking script failed to update the count.');
-    }
-  })
-  .catch(error => {
-    console.error('Error calling the tracking script:', error);
-  });
-}
-
-*/
 
