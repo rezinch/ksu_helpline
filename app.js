@@ -96,14 +96,14 @@ function setupTabs() {
 function loadDataForTab(tabName) {
     if (tabName === 'bus' && !dataLoadState.bus) {
       dataLoadState.bus = true;
-      loadBusTimes('alp.json', 'busTimesAlappuzha');
-      loadBusTimes('kylp.json', 'busTimesKayalpuram');
+      loadBusTimes('/alp.json', 'busTimesAlappuzha');
+      loadBusTimes('/kylp.json', 'busTimesKayalpuram');
     }
     
     if (tabName === 'hostels' && !dataLoadState.hostels) {
       dataLoadState.hostels = true;
-      loadHostelsFromSheet('gh.json', 'girlsTable');
-      loadHostelsFromSheet('bh.json', 'boysTable');
+      loadHostelsFromSheet('/gh.json', 'girlsTable');
+      loadHostelsFromSheet('/bh.json', 'boysTable');
     }
   }
   
