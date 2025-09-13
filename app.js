@@ -96,8 +96,8 @@ function setupTabs() {
   function loadDataForTab(tabName) {
     if (tabName === 'bus' && !dataLoadState.bus) {
       dataLoadState.bus = true; // Mark as "requested" immediately
-      loadBusTimes('alp.csv' + Date.now(), 'busTimesAlappuzha');
-      loadBusTimes('kylp.csv' + Date.now(), 'busTimesKayalpuram');
+      loadBusTimes('alp.csv', 'busTimesAlappuzha');
+      loadBusTimes('kylp.csv', 'busTimesKayalpuram');
     }
     
     if (tabName === 'hostels' && !dataLoadState.hostels) {
