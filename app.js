@@ -93,17 +93,17 @@ function setupTabs() {
   const allSections = $$('.tab-content');
 
   // This function ONLY loads data if it hasn't been loaded before
-  function loadDataForTab(tabName) {
+function loadDataForTab(tabName) {
     if (tabName === 'bus' && !dataLoadState.bus) {
-      dataLoadState.bus = true; // Mark as "requested" immediately
-      loadBusTimes('alp.csv', 'busTimesAlappuzha');
-      loadBusTimes('kylp.csv', 'busTimesKayalpuram');
+      dataLoadState.bus = true;
+      loadBusTimes('alp.json', 'busTimesAlappuzha');
+      loadBusTimes('kylp.json', 'busTimesKayalpuram');
     }
     
     if (tabName === 'hostels' && !dataLoadState.hostels) {
-      dataLoadState.hostels = true; // Mark as "requested" immediately
-      loadHostelsFromSheet('gh.csv', 'girlsTable');
-      loadHostelsFromSheet('bh.csv', 'boysTable');
+      dataLoadState.hostels = true;
+      loadHostelsFromSheet('gh.json', 'girlsTable');
+      loadHostelsFromSheet('bh.json', 'boysTable');
     }
   }
   
@@ -390,33 +390,32 @@ function setupGSAP() {
 /*****************
   Data Fetching Functions (with better loading/error states)
 *****************/
-function loadBusTimes(csvUrl, tbodyId) {
+function loadBusTimes(jsonUrl, tbodyId) {
   const tbody = document.getElementById(tbodyId);
   if (!tbody) return;
   
   const colCount = tbody.previousElementSibling.firstElementChild.childElementCount || 4;
   tbody.innerHTML = `<tr><td colspan="${colCount}">Loading...</td></tr>`;
 
-  fetch(csvUrl)
-    .then(res => res.ok ? res.text() : Promise.reject(new Error(`Network response was not ok. Status: ${res.status}`)))
-    .then(csv => {
-      const rows = csv.trim().split('\n').map(r => r.split(','));
-      const dataRows = rows.slice(1);
-      
+  fetch(jsonUrl)
+    .then(res => res.ok ? res.json() : Promise.reject(new Error(`File not found: ${jsonUrl}`)))
+    .then(data => { // 'data' is now a ready-to-use JavaScript array
       tbody.innerHTML = ''; 
 
-      if(dataRows.length === 0 || (dataRows.length === 1 && dataRows[0].every(cell => !cell.trim()))) {
+      if (data.length === 0) {
           tbody.innerHTML = `<tr><td colspan="${colCount}">No timings available.</td></tr>`;
           return;
       }
 
-      dataRows.forEach(row => {
+      data.forEach(route => {
         const tr = document.createElement('tr');
-        row.forEach(cell => {
-          const td = document.createElement('td');
-          td.textContent = cell.trim();
-          tr.appendChild(td);
-        });
+        // Assumes your bus JSON has from_station, from_time, to_station, to_time
+        tr.innerHTML = `
+          <td>${route.from_station || ''}</td>
+          <td>${route.from_time || ''}</td>
+          <td>${route.to_station || ''}</td>
+          <td>${route.to_time || ''}</td>
+        `;
         tbody.appendChild(tr);
       });
     })
@@ -426,35 +425,30 @@ function loadBusTimes(csvUrl, tbodyId) {
     });
 }
 
-function loadHostelsFromSheet(csvUrl, tableId) {
+function loadHostelsFromSheet(jsonUrl, tableId) {
     const tbody = document.getElementById(tableId);
     if (!tbody) return;
     
     const colCount = tbody.previousElementSibling.firstElementChild.childElementCount || 2;
     tbody.innerHTML = `<tr><td colspan="${colCount}">Loading...</td></tr>`;
     
-  fetch(csvUrl)
-    .then(res => res.ok ? res.text() : Promise.reject(new Error(`Network response was not ok. Status: ${res.status}`)))
-    .then(csv => {
-      const rows = csv.trim().split('\n').map(r => r.split(','));
-      const dataRows = rows.slice(1);
-
+  fetch(jsonUrl)
+    .then(res => res.ok ? res.json() : Promise.reject(new Error(`File not found: ${jsonUrl}`)))
+    .then(data => { // 'data' is now a ready-to-use JavaScript array
       tbody.innerHTML = '';
 
-      if(dataRows.length === 0 || (dataRows.length === 1 && dataRows[0].every(cell => !cell.trim()))) {
+      if (data.length === 0) {
           tbody.innerHTML = `<tr><td colspan="${colCount}">No hostels listed.</td></tr>`;
           return;
       }
 
-      dataRows.forEach(row => {
+      data.forEach(hostel => {
         const tr = document.createElement('tr');
         tr.classList.add('hostel-row');
-        tr.dataset.name = row[0].toLowerCase();
-        row.forEach(cell => {
-          const td = document.createElement('td');
-          td.textContent = cell.trim();
-          tr.appendChild(td);
-        });
+        tr.innerHTML = `
+            <td>${hostel.name || ''}</td>
+            <td>${hostel.phone || ''}</td>
+        `;
         tbody.appendChild(tr);
       });
     })
