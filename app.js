@@ -393,23 +393,23 @@ function setupGSAP() {
 function loadBusTimes(jsonUrl, tbodyId) {
   const tbody = document.getElementById(tbodyId);
   if (!tbody) return;
-  
+
   const colCount = tbody.previousElementSibling.firstElementChild.childElementCount || 4;
   tbody.innerHTML = `<tr><td colspan="${colCount}">Loading...</td></tr>`;
 
   fetch(jsonUrl)
     .then(res => res.ok ? res.json() : Promise.reject(new Error(`File not found: ${jsonUrl}`)))
-    .then(data => { // 'data' is now a ready-to-use JavaScript array
-      tbody.innerHTML = ''; 
+    .then(data => {
+      tbody.innerHTML = '';
 
-      if (data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="${colCount}">No timings available.</td></tr>`;
-          return;
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${colCount}">No timings available.</td></tr>`;
+        return;
       }
 
       data.forEach(route => {
         const tr = document.createElement('tr');
-        // Assumes your bus JSON has from_station, from_time, to_station, to_time
+        tr.classList.add('bus-row');
         tr.innerHTML = `
           <td>${route.from_station || ''}</td>
           <td>${route.from_time || ''}</td>
@@ -420,7 +420,7 @@ function loadBusTimes(jsonUrl, tbodyId) {
       });
     })
     .catch(err => {
-      console.error(`Failed to load ${tbodyId}:`, err);
+      console.error(`Bus fetch failed: ${err}`);
       tbody.innerHTML = `<tr><td colspan="${colCount}">Error loading data.</td></tr>`;
     });
 }
